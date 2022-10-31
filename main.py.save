@@ -1,0 +1,7 @@
+import discord
+
+file = open("token.env")
+
+token = file.read()
+
+
