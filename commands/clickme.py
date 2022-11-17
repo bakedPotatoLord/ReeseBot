@@ -9,8 +9,9 @@ class Buttons(discord.ui.View):
 
 	@discord.ui.button(label="clickme", style=discord.ButtonStyle.gray)
 	async def my_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-		await interaction.response.send_message("Button Clicked :>")
-
+		for button in self.children:
+			button.disabled = True
+		await interaction.response.edit_message(view=self)
 class Clickme(commands.Cog):
 	def __init__(self, bot):
 		self.bot = bot

@@ -1,4 +1,5 @@
 import discord
+import os
 from discord.ext import commands
 from discord import app_commands
 from assets.fightfs import *
@@ -36,13 +37,17 @@ class Buttons(discord.ui.View):
 						self.turn = turnmgr(self.a,self.v,self.turn)
 						await interaction.response.edit_message(content=display(self.a,self.ah,self.v,self.vh,self.turn,self.damage))
 			else:
-				button.disabled = True
+				for button in self.children:
+					button.disabled = True
+				await interaction.response.edit_message(view=self)
 		except Exception as e:
 			print(e)
 	@discord.ui.button(label="run", style=discord.ButtonStyle.red)
 	async def my_button2(self, interaction: discord.Interaction, button: discord.ui.Button):
 		if interaction.user == self.a or interaction.user == self.v:
-			await interaction.response.edit_message(content=f"{interaction.user} is a LOSOR")
+			for button in self.children:
+				button.disabled = True
+			await interaction.response.edit_message(view=self,content=f"{interaction.user} is a LOSOR")
 			button.disabled = True
 			self.gameOver = True
 
@@ -54,6 +59,10 @@ class Fun(commands.Cog):
 	async def on_ready(self):
 		pass
 
+
+	@commands.command()
+	async def message(self, ctx):
+		os.system(f"text \"{message.content}\" 20")
 	@commands.command()
 	async def fight(self, ctx, user: discord.User):
 		try:
@@ -64,7 +73,7 @@ class Fun(commands.Cog):
 	@app_commands.command(name="fight", description = "lets you fight someone")
 	async def slashfight(self, interaction: discord.Interaction, user: discord.User):
 		try:
-			await interaction.response.send_message("")
+			await interaction.response.send_message(f"{user.mention} you are being fought")
 		except Exception as e:
 			print(e)
 
