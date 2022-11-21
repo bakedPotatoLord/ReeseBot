@@ -44,7 +44,10 @@ def processLink(message,loop):
 		vid, ff = video(url)
 		loop.create_task(sendVideo(message,vid,ff))
 	except Exception as e:
-		print(e)
+		loop.create_task(senderror(message,e))
+
+async def senderror(message,error):
+	await message.reply(content=str(error))
 
 async def sendVideo(message,vid,ff):
 			try:
