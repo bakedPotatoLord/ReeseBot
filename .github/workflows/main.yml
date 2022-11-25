@@ -9,6 +9,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Install modules
-      run: npm ci
+      run: npm i
     - name: deploy commands
       run: npm run deploy
