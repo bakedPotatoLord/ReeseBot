@@ -1,29 +1,14 @@
-import * as dotenv from 'dotenv' 
-dotenv.config()
-
-import fs from 'node:fs';
-import path from 'node:path';
-
-
-
 import { REST, Routes } from 'discord.js';
-import { TOKEN } from './consts.js';
-import ping from "./commands/ping.js"
+import { CLIENTID, TOKEN } from './consts.js';
+import fs from 'node:fs';
 
-
-export async function deployCommands(guildIds,clientIds){
-
-
-ping.data
-	
-
-const commands:string[] = [];
+const commands = [];
 // Grab all the command files from the commands directory you created earlier
 const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
 // Grab the SlashCommandBuilder#toJSON() output of each command's data for deployment
 for (const file of commandFiles) {
-	const command = (await import(`./commands/${file}`))
+	const command = require(`./commands/${file}`);
 	commands.push(command.data.toJSON());
 }
 
@@ -31,13 +16,13 @@ for (const file of commandFiles) {
 const rest = new REST({ version: '10' }).setToken(TOKEN);
 
 // and deploy your commands!
-
+(async () => {
 	try {
-		console.log(`Started refreshing ${commands.length} application (/) commands.`);
+		
 
 		// The put method is used to fully refresh all commands in the guild with the current set
 		const data = await rest.put(
-			Routes.applicationGuildCommands(clientIds, guildIds),
+			Routes.applicationCommands(CLIENTID ),
 			{ body: commands },
 		);
 		//@ts-ignore
@@ -46,8 +31,11 @@ const rest = new REST({ version: '10' }).setToken(TOKEN);
 		// And of course, make sure you catch and log any errors!
 		console.error(error);
 	}
+})();
 
 
+function deleteAllComands(){
+	rest.put(Routes.applicationCommands(CLIENTID), { body: [] })
+	.then(() => console.log('Successfully deleted all application commands.'))
+	.catch(console.error);
 }
-
-
