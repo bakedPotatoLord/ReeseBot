@@ -6,10 +6,13 @@ import os
 
 def video(name):
 	ff = name.split("/")[-1].strip("-")
+	if ff == "":
+		ff = name.split("/")[-2].strip("-")
 	if "tube" in name:
 		os.system(f"yt-dlp -f \"bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best\" -v -o {ff}video.mp4 " + name)
 	else:
-		os.system(f"yt-dlp -v -o {ff}video.mp4 " + name)
+		print(ff)
+		os.system(f"yt-dlp {name} -o {ff}video.mp4 ")
 	os.system(f"mv {ff}video.mp4 compme{ff}.mp4")
 	while not os.path.exists(f"finished{ff}.mp4"):
 		pass
@@ -50,12 +53,19 @@ def compress_video(video_full_path):
         ffmpeg.output(i, output_file_name,**{'c:v': 'libx264', 'b:v': video_bitrate, 'pass': 2, 'c:a': 'aac', 'b:a': audio_bitrate}).overwrite_output().run()
         os.system(f"mv {output_file_name} finished{output_file_name}")
         os.system(f"rm {video_full_path}")
+
+
 def compress_forever():
 	while True:
-		try:
-			for file in os.listdir():
-				if file.split(".")[-1] == "mp4":
-					if "compme" in file:
+		for file in os.listdir():
+			if file.split(".")[-1] == "mp4":
+				if "compme" in file:
+					print("compressing video")
+					try:
 						compress_video(file)
-		except:
-			pass
+					except Exception as e:
+						print(e)
+						compressed_something = False
+
+
+
