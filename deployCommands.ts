@@ -1,15 +1,18 @@
 import { REST, Routes } from 'discord.js';
 import { CLIENTID, TOKEN } from './consts.js';
-import fs from 'node:fs';
+import fs from 'node:fs/promises';
 
 const commands = [];
 // Grab all the command files from the commands directory you created earlier
-const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+const commandFiles = (await fs.readdir('./build/commands')).filter(file => file.endsWith('.js'));
+
+console.log(`found ${commandFiles.length} command files`)
+
 
 // Grab the SlashCommandBuilder#toJSON() output of each command's data for deployment
 for (const file of commandFiles) {
-	const command = require(`./commands/${file}`);
-	commands.push(command.data.toJSON());
+	const command = await import(`./commands/${file}`);
+	commands.push(command.default.data.toJSON());
 }
 
 // Construct and prepare an instance of the REST module
@@ -34,8 +37,3 @@ const rest = new REST({ version: '10' }).setToken(TOKEN);
 })();
 
 
-function deleteAllComands(){
-	rest.put(Routes.applicationCommands(CLIENTID), { body: [] })
-	.then(() => console.log('Successfully deleted all application commands.'))
-	.catch(console.error);
-}
