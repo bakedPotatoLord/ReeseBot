@@ -1,0 +1,16 @@
+name: Tests
+on: [push]
+
+env:
+  bestFood: potato
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v3.5.1
+    - name: Install modules
+      run: npm ci
+    - name: deploy commands
+      run: npm run deploy
