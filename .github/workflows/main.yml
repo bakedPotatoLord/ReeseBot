@@ -13,10 +13,6 @@ jobs:
         node-version: 16
     - name: Install modules
       run: npm ci
-  deploy:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
     - name: remove watch flag
       run: npm run removeWatch
     - name: tsc
