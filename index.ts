@@ -15,7 +15,7 @@ const client: Client = new Client({ intents: [
 	IntentsBitField.Flags.GuildEmojisAndStickers
 ] });
 
-
+//@ts-ignore
 client.commands = new Collection();
 const commandFiles = (await fs.readdir("./build/commands")).filter(file => file.endsWith('.js'));
 
@@ -28,6 +28,7 @@ for (const file of commandFiles) {
 	const command = (await import(`./commands/${file}`)).default;
 	// Set a new item in the Collection with the key as the command name and the value as the exported module
 	if ('data' in command && 'execute' in command) {
+    //@ts-ignore
 		client.commands.set(command.data.name, command);
 	} else {
 		console.log(`[WARNING] The command is missing a required "data" or "execute" property.`);
@@ -48,6 +49,7 @@ client.once('ready', () => {
 
 client.on(Events.InteractionCreate, async interaction => {
 	if (!interaction.isCommand()) return;
+  //@ts-ignore
 	const command = client.commands.get(interaction.commandName);
 	if (!command) return;
 	try {
