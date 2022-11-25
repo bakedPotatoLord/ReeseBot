@@ -1,8 +1,7 @@
 
 import fs  from 'node:fs'
 import path from 'node:path';
-import { Client, Collection, IntentsBitField, Emoji, ReactionEmoji, MessageReaction, ActivityType } from 'discord.js';
-import { deployCommands } from './deployCommands.js'
+import { Client, Collection, IntentsBitField, ActivityType } from 'discord.js';
 import { disses, TOKEN } from './consts.js';
 
 import { fileURLToPath } from 'url'
@@ -22,13 +21,6 @@ const commandsPath = path.join(__dirname, 'commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
 
-
-for (let file of commandFiles) {
-	const filePath = path.join(commandsPath, file);
-	const command = await import(filePath);
-	client.commands.set(command.data.name, command);
-}
-
 client.once('ready', () => {
 	//registerSelf(client)
   if(client.user){
@@ -40,13 +32,12 @@ client.once('ready', () => {
     console.log(`Ready at ${new Date(client.readyTimestamp)}`);
   }
 	
-	deployCommands(client.guilds.cache.map(guild => guild.id),client)
 });
 
 client.on('interactionCreate', async interaction => {
 	if (!interaction.isCommand()) return;
 
-	const command = client.commands.get(interaction.commandName);
+	let command = client.commands.get(interaction.commandName);
 
 	if (!command) return;
 
@@ -78,6 +69,6 @@ client.on('messageCreate', message => {
 
 client.login(TOKEN);
 
-function checkforWord(inp,word){
+function checkforWord(inp:string,word:string){
 	return (inp.toLowerCase().replace(/ /g,"").includes(word))
 }
