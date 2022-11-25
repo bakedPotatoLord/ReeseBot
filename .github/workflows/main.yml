@@ -1,16 +1,13 @@
 name: Publish Commands
 on: [push]
 
-env:
-  bestFood: potato
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: move down
-      run: cd ..
+    - uses: actions/checkout@v2
     - name: Install modules
-      run: npm i
-    - name: deploy commands
-      run: npm run deploy
+      run: npm ci
+    - name: Run publish
+      run: npm run publish
