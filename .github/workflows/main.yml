@@ -8,6 +8,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+    - name: move down
+      run: cd ..
     - name: Install modules
       run: npm i
     - name: deploy commands
