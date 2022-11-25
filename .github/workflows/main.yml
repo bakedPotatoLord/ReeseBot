@@ -3,7 +3,7 @@ on: [push]
 
 
 jobs:
-  build:
+  setup:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -13,9 +13,12 @@ jobs:
         node-version: 16
     - name: Install modules
       run: npm ci
+  deploy:
+    needs: setup
     - name: remove watch flag
       run: npm run removeWatch
     - name: tsc
       run: ./node_modules/typescript/bin/tsc 
     - name: Run publish
       run: npm run deploy
+
