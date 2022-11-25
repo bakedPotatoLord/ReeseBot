@@ -8,10 +8,3 @@ export const CLIENTID = process.env["CLIENTID"]
 export const guildIds:string[] = [
   "986808066353815595"
 ]
-
-
-
-
-
-
-
