@@ -15,5 +15,7 @@ jobs:
       run: npm ci
     - name: Typescript compiler
       uses: iCrawl/action-tsc@v1
+      with:
+        watch: false
     - name: Run publish
       run: npm run deploy
