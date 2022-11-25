@@ -11,11 +11,11 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: 16
+    - name: Setup TypeScript
+      uses: Tyler887/TypeScript-GitHub-Actions@1.0
     - name: Install modules
       run: npm ci
-    - name: Typescript compiler
-      uses: iCrawl/action-tsc@v1
-      with:
-        watch: false
+    - name: tsc
+      run: tsc --watch=false
     - name: Run publish
       run: npm run deploy
