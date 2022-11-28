@@ -10,6 +10,6 @@
       "skipLibCheck": true,
       "moduleResolution": "node"
   },
-  "include": ["*.ts","commands/*.ts"],
+  "include": ["*.ts","**/*.ts","**/**/*.ts"],
   "exclude":["node_modules","./build/*","*.test.ts","*.config.ts"]
 }
